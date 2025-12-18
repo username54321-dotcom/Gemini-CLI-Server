@@ -1,26 +1,21 @@
 type GenerateResponseArgs = {
   prompt: string;
   systemPrompt?: string;
+  model?: string;
 };
 
 export async function generateResponse({
   prompt,
   systemPrompt,
-}: GenerateResponseArgs): Promise<string> {
+  model = "gemini-2.5-flash",
+}: GenerateResponseArgs): Promise<Record<string, unknown>> {
+  // New Terminal Instance
   const cmd = new Deno.Command("gemini", {
-    args: ["-m", "gemini-2.5-flash", "--output-format", "json"],
+    args: ["-m", model, "--output-format", "json"],
     stdout: "piped",
     stderr: "piped",
     stdin: "piped",
   });
-  if (!systemPrompt) {
-    try {
-      Deno.removeSync("./GEMINI.MD");
-    } catch (_) {
-      null;
-    }
-  }
-  if (systemPrompt) await Deno.writeTextFile("./GEMINI.md", systemPrompt);
 
   const child = cmd.spawn();
 
@@ -34,19 +29,16 @@ export async function generateResponse({
 
   await writer.write(encodedPrompt);
   await writer.close();
-  // Wait for the CLI to finish and get output
-  const { stdout, stderr, code } = await child.output();
+  const { stdout } = await child.output();
 
-  // --- PROCESS OUTPUT ---
-
-  if (code !== 0) {
-    const errorOutput = new TextDecoder().decode(stderr);
-    throw new Error(`Gemini CLI Error: ${errorOutput}`);
-  }
-
-  // Decode the success output
   const outputText = new TextDecoder().decode(stdout);
-  const parsedText = JSON.parse(outputText).response;
+  const parsedText = JSON.parse(outputText);
+  console.log(parsedText);
+  const outputObj = {
+    message: parsedText.response,
+    tokens: parsedText.stats.models[model].tokens,
+    model: model,
+  };
 
-  return parsedText;
+  return outputObj;
 }
