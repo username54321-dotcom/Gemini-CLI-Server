@@ -11,7 +11,7 @@ export async function generateResponse({
 }: GenerateResponseArgs): Promise<Record<string, unknown>> {
   // New Terminal Instance
   const cmd = new Deno.Command("gemini", {
-    args: ["-m", model, "--output-format", "json"],
+    args: ["-m", model, "--output-format", "json", "-s"],
     stdout: "piped",
     stderr: "piped",
     stdin: "piped",

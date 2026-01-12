@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Deno: Run",
+      "request": "launch",
+      "type": "node", // VS Code uses the Node debugger protocol for Deno
+      "program": "${workspaceFolder}/main.ts", // CHANGE THIS to your actual entry file
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "deno", // <--- CRITICAL: Tells VS Code to use Deno
+      "runtimeArgs": [
+        "run",
+        "--inspect-brk", // <--- CRITICAL: Waits for debugger before running
+        "--allow-all",
+        "--env" // Adjust permissions as needed
+      ],
+      "attachSimplePort": 9229
+    }
+  ]
+}

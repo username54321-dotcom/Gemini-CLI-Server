@@ -9,6 +9,7 @@ app.onError((e, ctx) => {
   return ctx.json({ error: e });
 });
 const authKey = Deno.env.get("AUTH_KEY");
+
 app.post(
   "/",
   // Validations
