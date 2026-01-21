@@ -1,3 +1,3 @@
-import { Logger } from '@qamareg/zlogger'
+import { Logger } from "@qamareg/zlogger";
 
-export const logger=new Logger({})
+export const logger = new Logger({});

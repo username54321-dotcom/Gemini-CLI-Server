@@ -30,5 +30,5 @@ export const headerValidation = zValidator(
     if (!res.success) {
       return ctx.json(res.error.message);
     }
-  }
+  },
 );

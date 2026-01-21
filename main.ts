@@ -4,11 +4,16 @@ import {
   bodyValidation,
   headerValidation,
 } from "./validation/requestValidation.ts";
+
 const app = new Hono();
 app.onError((e, ctx) => {
   return ctx.json({ error: e });
 });
+
 const authKey = Deno.env.get("AUTH_KEY");
+if (!authKey) {
+  console.warn("AUTH_KEY is not set.");
+}
 
 app.post(
   "/",
@@ -29,9 +34,9 @@ app.post(
       prompt: prompt,
       systemPrompt: systemPrompt,
       model: model,
-    }).then((x) => x);
+    });
     return ctx.json(output);
-  }
+  },
 );
 
 Deno.serve({ port: 8000 }, app.fetch);
