@@ -5,7 +5,7 @@ import {
   headerValidation,
 } from "./validation/requestValidation.ts";
 
-const app = new Hono();
+export const app = new Hono();
 app.onError((e, ctx) => {
   return ctx.json({ error: e });
 });
@@ -38,5 +38,3 @@ app.post(
     return ctx.json(output);
   },
 );
-
-Deno.serve({ port: 8000 }, app.fetch);

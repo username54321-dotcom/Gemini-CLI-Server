@@ -41,7 +41,7 @@ export async function generateResponse({
 
   try {
     const parsedText = JSON.parse(outputText);
-    console.log(parsedText);
+    console.info("Generated Response: ", !!parsedText);
     const outputObj = {
       message: parsedText.response,
       tokens: parsedText.stats?.models?.[model]?.tokens ?? 0,
